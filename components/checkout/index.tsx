@@ -1,10 +1,9 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import images from '@/assets';
 import AmountInput from './AmountInput';
 import WalletSelector from './WalletSelector';
-import { convertCrypto } from '@/utility/func';
+import { useConversion } from '@/hooks/useConversion'; 
 
 const PAYMENT_TYPES = [
   {id: 'crypto-to-cash', label: 'Crypto to cash'},
@@ -14,108 +13,28 @@ const PAYMENT_TYPES = [
 
 const CheckoutScreen = () => {
   const [selectedTransferType, setSelectedTransferType] = useState('crypto-to-cash');
-  const [payingAmount, setPayingAmount] = useState('');
-  const [selectedPayingCrypto, setSelectedPayingCrypto] = useState('eth');
-  const [payingWallet, setPayingWallet] = useState('');
-  const [receivingWallet, setReceivingWallet] = useState('');
-  const [receivingAmount, setReceivingAmount] = useState('');
-  const [selectedReceivingCrypto, setSelectedReceivingCrypto] = useState('usdt-cello');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [lastEditedField, setLastEditedField] = useState<'paying' | 'receiving'>('paying');
-
-
- 
-  // Auto-convert when paying amount or cryptos change
-  useEffect(() => {
-    if (lastEditedField === 'paying' && payingAmount && selectedPayingCrypto && selectedReceivingCrypto) {
-      const converted = convertCrypto(
-        payingAmount,
-        selectedPayingCrypto,
-        selectedReceivingCrypto
-      );
-      setReceivingAmount(converted);
-    } else if (lastEditedField === 'paying' && !payingAmount) {
-      setReceivingAmount('');
-    }
-  }, [payingAmount, selectedPayingCrypto, selectedReceivingCrypto, lastEditedField]);
-
-  // Auto-convert when receiving amount or cryptos change
-  useEffect(() => {
-    if (lastEditedField === 'receiving' && receivingAmount && selectedPayingCrypto && selectedReceivingCrypto) {
-      const converted = convertCrypto(
-        receivingAmount,
-        selectedReceivingCrypto,
-        selectedPayingCrypto
-      );
-      setPayingAmount(converted);
-    } else if (lastEditedField === 'receiving' && !receivingAmount) {
-      setPayingAmount('');
-    }
-  }, [receivingAmount, selectedPayingCrypto, selectedReceivingCrypto, lastEditedField]);
-
-  const handlePayingAmountChange = (value: string) => {
-    setLastEditedField('paying');
-    setPayingAmount(value);
-  };
-
-  const handleReceivingAmountChange = (value: string) => {
-    setLastEditedField('receiving');
-    setReceivingAmount(value);
-  };
-
-  const isFormValid = 
-    payingAmount && 
-    selectedPayingCrypto && 
-    payingWallet && 
-    receivingAmount && 
-    selectedReceivingCrypto && 
-    receivingWallet;
-
-  const handleConvert = async () => {
-    if (!isFormValid) {
-      alert('Please fill in all fields');
-      return;
-    }
-
-    setIsProcessing(true);
-
-    try {
-      const conversionData = {
-        transferType: selectedTransferType,
-        paying: {
-          amount: payingAmount,
-          crypto: selectedPayingCrypto,
-          wallet: payingWallet,
-        },
-        receiving: {
-          amount: receivingAmount,
-          crypto: selectedReceivingCrypto,
-          wallet: receivingWallet,
-        },
-        timestamp: new Date().toISOString(),
-      };
-
-      console.log('Processing conversion:', conversionData);
-
-      setPayingAmount('');
-      setSelectedPayingCrypto('eth');
-      setPayingWallet('');
-      setReceivingAmount('');
-      setSelectedReceivingCrypto('usdt-cello');
-      setReceivingWallet('');
-      setLastEditedField('paying');
-
-    } catch (error) {
-      console.error('Conversion error:', error);
-      alert('Conversion failed. Please try again.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  
+  const {
+    payingAmount,
+    selectedPayingCrypto,
+    payingWallet,
+    receivingAmount,
+    selectedReceivingCrypto,
+    receivingWallet,
+    isProcessing,
+    isFormValid,
+    handlePayingAmountChange,
+    handleReceivingAmountChange,
+    setSelectedPayingCrypto,
+    setPayingWallet,
+    setSelectedReceivingCrypto,
+    setReceivingWallet,
+    handleConvert,
+  } = useConversion();
 
   return (
     <div className='
-    bg-white 
+      bg-white 
       border border-[#CCF6E5] 
       w-[80vh] max-w-[640]  
       h-[758] max-h-[95vh]
@@ -125,9 +44,8 @@ const CheckoutScreen = () => {
       px-4 sm:px-0 
       text-black
       space-y-8
-      '
-    >
-      <div className='bg-[#f2f2f2] rounded-[24] flex relative '>
+    '>
+      <div className='bg-[#f2f2f2] rounded-[24] flex relative'>
         {PAYMENT_TYPES.map((item) => (
           <div
             key={item.id}
@@ -146,7 +64,7 @@ const CheckoutScreen = () => {
               />
             )}
             <p className={`
-              text-xs  font-medium select-none whitespace-nowrap relative z-10 transition-colors duration-200
+              text-xs font-medium select-none whitespace-nowrap relative z-10 transition-colors duration-200
               ${selectedTransferType === item.id ? 'text-[#F8FEFB]' : 'text-[#828282]'}
             `}>
               {item.label}
@@ -182,24 +100,23 @@ const CheckoutScreen = () => {
           selectedWallet={receivingWallet}
           onWalletChange={setReceivingWallet}
         />
-      
       </div>
-        <button 
-          onClick={handleConvert}
-          disabled={!isFormValid || isProcessing}
-          className={`
-            rounded-[24] py-3 w-full font-medium
-            transition-all duration-200 bg-green text-[#E6FBF2] hover:bg-green/90 
-            max-w-md
-            ${isFormValid && !isProcessing
-              ? 'cursor-pointer' 
-              : ' cursor-not-allowed'
-            }
-          `}
-        >
-          {isProcessing ? 'Processing...' : 'Convert now'}
-        </button>
-      
+
+      <button 
+        onClick={() => handleConvert(selectedTransferType)}
+        disabled={!isFormValid || isProcessing}
+        className={`
+          rounded-[24] py-3 w-full font-medium
+          transition-all duration-200 bg-green text-[#E6FBF2] hover:bg-green/90 
+          max-w-md
+          ${isFormValid && !isProcessing
+            ? 'cursor-pointer' 
+            : 'cursor-not-allowed'
+          }
+        `}
+      >
+        {isProcessing ? 'Processing...' : 'Convert now'}
+      </button>
     </div>
   );
 };
