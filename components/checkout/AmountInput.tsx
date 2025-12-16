@@ -117,11 +117,11 @@ const AmountInput = ({
             value={finalDisplay}
             placeholder={placeholder || "0.00"}
             onChange={handleChange}
-            className="font-semibold text-xl outline-none flex-1 min-w-0"
+            className="font-semibold text-xl outline-none flex-1 max-w-[200] sm:max-w-none min-w-0"
             inputMode="decimal"
           />
           
-          <div className='relative' ref={dropdownRef}>
+          <div className='relative ' ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -134,7 +134,7 @@ const AmountInput = ({
                 alt={`${currentCrypto.label} logo`}
                 className='rounded-full'
               />
-              <span className='block text-green text-xs select-none'>
+              <span className='block text-green text-xs select-none no-wrap'>
                 {currentCrypto.label}
               </span> 
               <ChevronDown     
@@ -150,12 +150,12 @@ const AmountInput = ({
                   <Search size={20} className='shrink-0' />
                   <input 
                     placeholder='Search'
-                    className='outline-none bg-transparent flex-1 text-sm'
+                    className='outline-none bg-transparent flex-1 text-sm text-[#828282]'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <div className='max-h-[240px] overflow-y-auto'>
+                <div className='max-h-[240] overflow-y-auto'>
                   {filteredCryptoCurrencies.length > 0 ? (
                     filteredCryptoCurrencies.map((crypto) => (
                       <button
