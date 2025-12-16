@@ -14,7 +14,7 @@ const CRYPTOCURRENCIES = [
 
 interface AmountInputType {
   value: string
-  onChange: React.Dispatch<React.SetStateAction<string>>,
+  onChange: (val: string) => void,
   placeholder: string,
   label: string,
   selectedCrypto: string
@@ -70,7 +70,7 @@ const AmountInput = ({
       }
     }, [cursorPosition, value]);
     
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const input = e.target.value;
       const currentCursorPos = e.target.selectionStart || 0;
       

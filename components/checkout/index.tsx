@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import images from '@/assets';
-import AmountInput from '../utility/AmountInput';
-import WalletSelector from '../utility/WalletSelector';
+import AmountInput from './AmountInput';
+import WalletSelector from './WalletSelector';
 import { convertCrypto } from '@/utility/func';
 
 const PAYMENT_TYPES = [
@@ -24,8 +24,7 @@ const CheckoutScreen = () => {
   const [lastEditedField, setLastEditedField] = useState<'paying' | 'receiving'>('paying');
 
 
-  console.log('data is', payingAmount, selectedPayingCrypto, payingWallet, receivingWallet, receivingAmount, selectedReceivingCrypto, )
-
+ 
   // Auto-convert when paying amount or cryptos change
   useEffect(() => {
     if (lastEditedField === 'paying' && payingAmount && selectedPayingCrypto && selectedReceivingCrypto) {
@@ -98,7 +97,6 @@ const CheckoutScreen = () => {
 
       console.log('Processing conversion:', conversionData);
 
-      // Reset form
       setPayingAmount('');
       setSelectedPayingCrypto('eth');
       setPayingWallet('');
