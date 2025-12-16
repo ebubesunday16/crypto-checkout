@@ -35,6 +35,7 @@ Open [http://localhost:3000](http://localhost:3000)
 - Conversion rates are mocked (production would use a live API)
 - Focus on component reusability and clean state management
 - Prioritized interaction polish over feature breadth within the time constraint
+- Clean, matured architecture
 
 ---
 **Demo**: [Link](https://crypto-checkout-omega.vercel.app/)
