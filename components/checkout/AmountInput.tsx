@@ -57,7 +57,6 @@ const AmountInput = ({
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Reset search when dropdown closes
     React.useEffect(() => {
       if (!isDropdownOpen) {
         setSearchQuery('');
@@ -122,12 +121,11 @@ const AmountInput = ({
             inputMode="decimal"
           />
           
-          {/* Dropdown container */}
           <div className='relative' ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className='flex items-center gap-1 bg-[#F7F7F7] border border-[#E0E0E0] px-2 py-1 rounded-[20] flex-shrink-0 hover:bg-gray-100 transition-colors'
+              className='flex items-center gap-1 bg-[#F7F7F7] border border-[#E0E0E0] px-2 py-1 rounded-[20] shrink-0 hover:bg-gray-100 transition-colors'
             >
               <Image 
                 src={currentCrypto.logo}
@@ -146,7 +144,6 @@ const AmountInput = ({
               />
             </button>
             
-            {/* Dropdown menu */}
             {isDropdownOpen && (
               <div className='absolute right-0 w-[264] px-3 py-4 bg-white border border-[#E0E0E0] rounded-[20] z-50 overflow-hidden space-y-2'>
                 <div className='rounded-[20] px-3 py-4 text-[#828282] flex gap-2 items-center border border-[#E0E0E0]'>
