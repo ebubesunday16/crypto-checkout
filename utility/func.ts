@@ -19,3 +19,28 @@ export const formatAmountDisplay = (val: string) => {
   return formattedInteger || '';
 };
 
+const EXCHANGE_RATES: Record<string, number> = {
+  'eth': 3500,       
+  'usdt-cello': 1,    
+  'usdt-ton': 1,      
+  'usdt-bnb': 1,      
+  'ngn': 0.0012,      
+};
+
+export const convertCrypto = (
+  amount: string,
+  fromCrypto: string,
+  toCrypto: string
+): string => {
+  if (!amount || !fromCrypto || !toCrypto) return '';
+  
+  const numAmount = parseFloat(amount);
+  if (isNaN(numAmount) || numAmount === 0) return '';
+  
+  // Convert to USD first, then to target crypto
+  const usdValue = numAmount * (EXCHANGE_RATES[fromCrypto] || 0);
+  const convertedAmount = usdValue / (EXCHANGE_RATES[toCrypto] || 1);
+  
+  // Round to 2 decimal places
+  return convertedAmount.toFixed(2);
+};

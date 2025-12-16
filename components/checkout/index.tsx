@@ -1,9 +1,10 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import images from '@/assets';
 import AmountInput from '../utility/AmountInput';
 import WalletSelector from '../utility/WalletSelector';
+import { convertCrypto } from '@/utility/func';
 
 const PAYMENT_TYPES = [
   {id: 'crypto-to-cash', label: 'Crypto to cash'},
@@ -13,13 +14,55 @@ const PAYMENT_TYPES = [
 
 const CheckoutScreen = () => {
   const [selectedTransferType, setSelectedTransferType] = useState('crypto-to-cash');
-  const [payingAmount, setPayingAmount] = useState('')
-  const [selectedPayingCrypto, setSelectedPayingCrypto] = useState('')
-  const [payingWallet, setPayingWallet] = useState('')
-  const [receivingWallet, setReceivingWallet] = useState('')
-  const [receivingAmount, setReceivingAmount] = useState('')
-  const [selectedReceivingCrypto, setSelectedReceivingCrypto] = useState('')
+  const [payingAmount, setPayingAmount] = useState('');
+  const [selectedPayingCrypto, setSelectedPayingCrypto] = useState('eth');
+  const [payingWallet, setPayingWallet] = useState('');
+  const [receivingWallet, setReceivingWallet] = useState('');
+  const [receivingAmount, setReceivingAmount] = useState('');
+  const [selectedReceivingCrypto, setSelectedReceivingCrypto] = useState('usdt-cello');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [lastEditedField, setLastEditedField] = useState<'paying' | 'receiving'>('paying');
+
+
+  console.log('data is', payingAmount, selectedPayingCrypto, payingWallet, receivingWallet, receivingAmount, selectedReceivingCrypto, )
+
+  // Auto-convert when paying amount or cryptos change
+  useEffect(() => {
+    if (lastEditedField === 'paying' && payingAmount && selectedPayingCrypto && selectedReceivingCrypto) {
+      const converted = convertCrypto(
+        payingAmount,
+        selectedPayingCrypto,
+        selectedReceivingCrypto
+      );
+      setReceivingAmount(converted);
+    } else if (lastEditedField === 'paying' && !payingAmount) {
+      setReceivingAmount('');
+    }
+  }, [payingAmount, selectedPayingCrypto, selectedReceivingCrypto, lastEditedField]);
+
+  // Auto-convert when receiving amount or cryptos change
+  useEffect(() => {
+    if (lastEditedField === 'receiving' && receivingAmount && selectedPayingCrypto && selectedReceivingCrypto) {
+      const converted = convertCrypto(
+        receivingAmount,
+        selectedReceivingCrypto,
+        selectedPayingCrypto
+      );
+      setPayingAmount(converted);
+    } else if (lastEditedField === 'receiving' && !receivingAmount) {
+      setPayingAmount('');
+    }
+  }, [receivingAmount, selectedPayingCrypto, selectedReceivingCrypto, lastEditedField]);
+
+  const handlePayingAmountChange = (value: string) => {
+    setLastEditedField('paying');
+    setPayingAmount(value);
+  };
+
+  const handleReceivingAmountChange = (value: string) => {
+    setLastEditedField('receiving');
+    setReceivingAmount(value);
+  };
 
   const isFormValid = 
     payingAmount && 
@@ -57,11 +100,12 @@ const CheckoutScreen = () => {
 
       // Reset form
       setPayingAmount('');
-      setSelectedPayingCrypto('');
+      setSelectedPayingCrypto('eth');
       setPayingWallet('');
       setReceivingAmount('');
-      setSelectedReceivingCrypto('');
+      setSelectedReceivingCrypto('usdt-cello');
       setReceivingWallet('');
+      setLastEditedField('paying');
 
     } catch (error) {
       console.error('Conversion error:', error);
@@ -117,7 +161,7 @@ const CheckoutScreen = () => {
         <AmountInput 
           label='You pay'
           value={payingAmount}
-          onChange={setPayingAmount}
+          onChange={handlePayingAmountChange}
           placeholder="0.00"
           selectedCrypto={selectedPayingCrypto}
           onCryptoChange={setSelectedPayingCrypto}
@@ -125,7 +169,7 @@ const CheckoutScreen = () => {
         <AmountInput 
           label='You receive'
           value={receivingAmount}
-          onChange={setReceivingAmount}
+          onChange={handleReceivingAmountChange}
           placeholder="0.00"
           selectedCrypto={selectedReceivingCrypto}
           onCryptoChange={setSelectedReceivingCrypto}
