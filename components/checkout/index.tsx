@@ -132,7 +132,7 @@ const CheckoutScreen = () => {
           <div
             key={item.id}
             onClick={() => setSelectedTransferType(item.id)}
-            className='relative z-10 rounded-[24] px-4 py-2 cursor-pointer'
+            className='relative z-10 rounded-[24] py-3 px-2 sm:px-4 sm:py-2 cursor-pointer'
           >
             {selectedTransferType === item.id && (
               <motion.div
@@ -183,12 +183,14 @@ const CheckoutScreen = () => {
           onWalletChange={setReceivingWallet}
         />
       
+      </div>
         <button 
           onClick={handleConvert}
           disabled={!isFormValid || isProcessing}
           className={`
             rounded-[24] py-3 w-full font-medium
             transition-all duration-200 bg-green text-[#E6FBF2] hover:bg-green/90 
+            max-w-md
             ${isFormValid && !isProcessing
               ? 'cursor-pointer' 
               : ' cursor-not-allowed'
@@ -197,7 +199,6 @@ const CheckoutScreen = () => {
         >
           {isProcessing ? 'Processing...' : 'Convert now'}
         </button>
-      </div>
       
     </div>
   );
