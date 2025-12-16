@@ -147,10 +147,10 @@ const AmountInput = ({
             {isDropdownOpen && (
               <div className='absolute right-0 w-[264] px-3 py-4 bg-white border border-[#E0E0E0] rounded-[20] z-50 overflow-hidden space-y-2'>
                 <div className='rounded-[20] px-3 py-4 text-[#828282] flex gap-2 items-center border border-[#E0E0E0]'>
-                  <Search size={20} className='shrink-0' />
+                  <Search size={20} className='shrink-0 text-[#828282] ' />
                   <input 
                     placeholder='Search'
-                    className='outline-none bg-transparent flex-1 text-sm text-[#828282]'
+                    className='outline-none bg-transparent flex-1 text-sm text-[#828282] placeholder:text-[#828282]'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -176,7 +176,7 @@ const AmountInput = ({
                           alt={`${crypto.label} logo`}
                           className='rounded-full'
                         />
-                        <span className='text-sm font-medium text-gray-900'>
+                        <span className='text-sm font-medium text-green'>
                           {crypto.label}
                         </span>
                         {crypto.id === selectedCrypto && (
