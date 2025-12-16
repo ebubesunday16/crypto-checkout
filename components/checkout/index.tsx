@@ -13,6 +13,7 @@ const PAYMENT_TYPES = [
 
 const CheckoutScreen = () => {
   const [selectedTransferType, setSelectedTransferType] = useState('crypto-to-cash');
+  const [email, setEmail] = useState('');
   
   const {
     payingAmount,
@@ -32,6 +33,19 @@ const CheckoutScreen = () => {
     handleConvert,
   } = useConversion();
 
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(`Thanks! We'll notify ${email} when ${selectedTransferType === 'cash-to-crypto' ? 'Cash to Crypto' : 'Crypto to Fiat Loan'} is available.`);
+    setEmail('');
+  };
+
+  const getPlaceholderTitle = () => {
+    if (selectedTransferType === 'cash-to-crypto') {
+      return 'Cash to Crypto';
+    }
+    return 'Crypto to Fiat Loan';
+  };
+
   return (
     <div className='
       bg-white 
@@ -39,13 +53,13 @@ const CheckoutScreen = () => {
       w-[80vh] max-w-[640]  
       h-[758] max-h-[95vh]
       rounded-[20]
-      flex flex-col justify-center items-center 
+      flex flex-col  items-center 
       py-8
       px-4 sm:px-0 
       text-black
       space-y-8
     '>
-      <div className='bg-[#f2f2f2] rounded-[24] flex relative'>
+      <div className='bg-[#f2f2f2] rounded-[24]  flex relative'>
         {PAYMENT_TYPES.map((item) => (
           <div
             key={item.id}
@@ -73,50 +87,97 @@ const CheckoutScreen = () => {
         ))}
       </div>
       
-      <div className='space-y-4 w-full max-w-md'>
-        <AmountInput 
-          label='You pay'
-          value={payingAmount}
-          onChange={handlePayingAmountChange}
-          placeholder="0.00"
-          selectedCrypto={selectedPayingCrypto}
-          onCryptoChange={setSelectedPayingCrypto}
-        />
-        <AmountInput 
-          label='You receive'
-          value={receivingAmount}
-          onChange={handleReceivingAmountChange}
-          placeholder="0.00"
-          selectedCrypto={selectedReceivingCrypto}
-          onCryptoChange={setSelectedReceivingCrypto}
-        />
-        <WalletSelector 
-          label='Pay from'
-          selectedWallet={payingWallet}
-          onWalletChange={setPayingWallet}
-        />
-        <WalletSelector 
-          label='Pay to'
-          selectedWallet={receivingWallet}
-          onWalletChange={setReceivingWallet}
-        />
-      </div>
+      {selectedTransferType === 'crypto-to-cash' ? (
+        <>
+          <div className='space-y-4 w-full max-w-md'>
+            <AmountInput 
+              label='You pay'
+              value={payingAmount}
+              onChange={handlePayingAmountChange}
+              placeholder="0.00"
+              selectedCrypto={selectedPayingCrypto}
+              onCryptoChange={setSelectedPayingCrypto}
+            />
+            <AmountInput 
+              label='You receive'
+              value={receivingAmount}
+              onChange={handleReceivingAmountChange}
+              placeholder="0.00"
+              selectedCrypto={selectedReceivingCrypto}
+              onCryptoChange={setSelectedReceivingCrypto}
+            />
+            <WalletSelector 
+              label='Pay from'
+              selectedWallet={payingWallet}
+              onWalletChange={setPayingWallet}
+            />
+            <WalletSelector 
+              label='Pay to'
+              selectedWallet={receivingWallet}
+              onWalletChange={setReceivingWallet}
+            />
+          </div>
 
-      <button 
-        onClick={() => handleConvert(selectedTransferType)}
-        disabled={!isFormValid || isProcessing}
-        className={`
-          rounded-[24] py-3 w-full font-medium
-          transition-all duration-200 bg-green text-[#E6FBF2] hover:bg-green/90 
-          max-w-md
-          ${isFormValid && !isProcessing
-            ? 'cursor-pointer' 
-            : 'cursor-not-allowed'
-          }
-        `}
-      >
-        {isProcessing ? 'Processing...' : 'Convert now'}
-      </button>
+          <button 
+            onClick={() => handleConvert(selectedTransferType)}
+            disabled={!isFormValid || isProcessing}
+            className={`
+              rounded-[24] py-3 w-full font-medium
+              transition-all duration-200 bg-green text-[#E6FBF2] hover:bg-green/90 
+              max-w-md
+              ${isFormValid && !isProcessing
+                ? 'cursor-pointer' 
+                : 'cursor-not-allowed'
+              }
+            `}
+          >
+            {isProcessing ? 'Processing...' : 'Convert now'}
+          </button>
+        </>
+      ) : (
+        <div className='flex flex-col items-center justify-center space-y-6 w-full max-w-md px-6 text-center  my-auto'>
+          <div className='space-y-3'>
+            <h2 className='text-3xl font-bold text-green'>Coming Soon!</h2>
+            <p className='text-sm sm:text-base text-[#4F4F4F]'>
+              {getPlaceholderTitle()} is almost here. <br />Enter your email and we'll let you know the moment it's live.
+            </p>
+              
+          </div>
+          
+          <form onSubmit={handleEmailSubmit} className='w-full space-y-3'>
+            <div className='space-y-4'>
+              <label htmlFor='email' className='text-sm font-medium text-green block text-left'>
+                Email
+              </label>
+              <input
+                id='email'
+                type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder='Enter your email'
+                required
+                className='
+                  w-full px-4 py-3 rounded-[24] border border-[#E0E0E0]
+                  text-sm placeholder:text-sm text-[#828282] placeholder:text-[#828282]
+
+                  focus:outline-none focus:border-green focus:ring-1 focus:ring-green
+                '
+              />
+            </div>
+            
+            <button
+              type='submit'
+              className='
+                w-full py-3 rounded-[24] font-medium
+                bg-green text-[#E6FBF2] hover:bg-green/90
+                transition-all duration-200 mt-16
+              '
+            >
+              Update me
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
