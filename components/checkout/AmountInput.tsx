@@ -117,7 +117,7 @@ const AmountInput = ({
             value={finalDisplay}
             placeholder={placeholder || "0.00"}
             onChange={handleChange}
-            className="font-semibold text-xl outline-none flex-1 max-w-[200] sm:max-w-none min-w-0"
+            className="font-semibold text-xl outline-none flex-1 max-w-[160] sm:max-w-none min-w-0"
             inputMode="decimal"
           />
           

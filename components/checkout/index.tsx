@@ -51,7 +51,7 @@ const CheckoutScreen = () => {
       bg-white 
       border border-[#CCF6E5] 
       w-[80vh] max-w-[640]  
-      h-[758] max-h-[95vh]
+      h-[758] max-h-[640] sm:max-h-[95vh]
       rounded-[20]
       flex flex-col  items-center 
       py-8
@@ -135,7 +135,7 @@ const CheckoutScreen = () => {
           </button>
         </>
       ) : (
-        <div className='flex flex-col items-center justify-center space-y-6 w-full max-w-md px-6 text-center  my-auto'>
+        <div className='flex flex-col items-center justify-center space-y-6 w-full max-w-md text-center  my-auto'>
           <div className='space-y-3'>
             <h2 className='text-3xl font-medium text-green font-clashdisplay'>Coming Soon!</h2>
             <p className='text-sm sm:text-base text-[#4F4F4F]'>
