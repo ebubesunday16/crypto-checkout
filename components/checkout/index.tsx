@@ -78,7 +78,7 @@ const CheckoutScreen = () => {
               />
             )}
             <p className={`
-              text-xs font-medium select-none whitespace-nowrap relative z-10 transition-colors duration-200
+              text-xs sm:text-sm font-medium select-none whitespace-nowrap relative z-10 transition-colors duration-200
               ${selectedTransferType === item.id ? 'text-[#F8FEFB]' : 'text-[#828282]'}
             `}>
               {item.label}
@@ -89,7 +89,7 @@ const CheckoutScreen = () => {
       
       {selectedTransferType === 'crypto-to-cash' ? (
         <>
-          <div className='space-y-4 w-full max-w-md'>
+          <div className='space-y-4 w-full max-w-md flex-1'>
             <AmountInput 
               label='You pay'
               value={payingAmount}
@@ -137,7 +137,7 @@ const CheckoutScreen = () => {
       ) : (
         <div className='flex flex-col items-center justify-center space-y-6 w-full max-w-md px-6 text-center  my-auto'>
           <div className='space-y-3'>
-            <h2 className='text-3xl font-bold text-green'>Coming Soon!</h2>
+            <h2 className='text-3xl font-medium text-green font-clashdisplay'>Coming Soon!</h2>
             <p className='text-sm sm:text-base text-[#4F4F4F]'>
               {getPlaceholderTitle()} is almost here. <br />Enter your email and we'll let you know the moment it's live.
             </p>
