@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import localFont from 'next/font/local'
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,9 +37,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.className} ${geistSans.variable} ${clashdisplay.variable} ${geistMono.variable} antialiased`}
+        className={`${outfit.className} ${geistSans.variable} ${clashdisplay.variable} ${geistMono.variable} antialiased bg-[#82A3A1]`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

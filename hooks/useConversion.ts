@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { convertCrypto } from '@/utility/func';
+import { toast } from 'sonner';
 
 interface ConversionState {
   payingAmount: string;
@@ -79,11 +80,14 @@ export const useConversion = () => {
 
   const handleConvert = async (transferType: string) => {
     if (!isFormValid) {
-      alert('Please fill in all fields');
+      toast.error('Please fill in all fields to continue');
       return;
     }
 
     setIsProcessing(true);
+
+    // Show processing toast
+    toast.loading(`Converting ${payingAmount} ${selectedPayingCrypto.toUpperCase()} to ${selectedReceivingCrypto.toUpperCase()}...`);
 
     try {
       const conversionData = {
@@ -102,14 +106,24 @@ export const useConversion = () => {
       };
 
       console.log('Processing conversion:', conversionData);
-
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       // Here you would typically make an API call
       // await api.processConversion(conversionData);
+
+      // Dismiss loading toast and show success
+      toast.dismiss();
+      toast.success(`Successfully converted ${payingAmount} ${selectedPayingCrypto.toUpperCase()} to ${receivingAmount} ${selectedReceivingCrypto.toUpperCase()}`);
 
       resetForm();
     } catch (error) {
       console.error('Conversion error:', error);
-      alert('Conversion failed. Please try again.');
+      
+      // Dismiss loading toast and show error
+      toast.dismiss();
+      toast.error('Conversion failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
