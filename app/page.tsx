@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex justify-center items-center p-4 sm:p-0">
+    <main className="min-h-dvh m-auto flex justify-center items-center p-4 sm:p-0">
 
       <CheckoutScreen />
     </main>
