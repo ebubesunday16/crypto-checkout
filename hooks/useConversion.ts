@@ -2,17 +2,26 @@ import { useState, useEffect } from 'react';
 import { convertCrypto } from '@/utility/func';
 import { toast } from 'sonner';
 
-interface ConversionState {
-  payingAmount: string;
-  selectedPayingCrypto: string;
-  payingWallet: string;
-  receivingAmount: string;
-  selectedReceivingCrypto: string;
-  receivingWallet: string;
-  isProcessing: boolean;
+export interface ConversionContext {
+  payingAmount: string
+  selectedPayingCrypto: string
+  payingWallet: string
+  receivingAmount: string
+  selectedReceivingCrypto: string
+  receivingWallet: string
+  isProcessing: boolean
+  isFormValid: boolean
+  handlePayingAmountChange: (value: string) => void
+  handleReceivingAmountChange: (value: string) => void
+  setSelectedPayingCrypto: React.Dispatch<React.SetStateAction<string>>
+  setPayingWallet: React.Dispatch<React.SetStateAction<string>>
+  setSelectedReceivingCrypto: React.Dispatch<React.SetStateAction<string>>
+  setReceivingWallet: React.Dispatch<React.SetStateAction<string>>
+  handleConvert: (transferType: string) => Promise<void>
+  resetForm: () => void
 }
 
-export const useConversion = () => {
+export const useConversion = (): ConversionContext => {
   const [payingAmount, setPayingAmount] = useState('');
   const [selectedPayingCrypto, setSelectedPayingCrypto] = useState('eth');
   const [payingWallet, setPayingWallet] = useState('');
