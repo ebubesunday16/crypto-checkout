@@ -10,7 +10,7 @@ export interface ConversionContext {
   selectedReceivingCrypto: string
   receivingWallet: string
   isProcessing: boolean
-  isFormValid: boolean
+  isFormValid: string
   handlePayingAmountChange: (value: string) => void
   handleReceivingAmountChange: (value: string) => void
   setSelectedPayingCrypto: React.Dispatch<React.SetStateAction<string>>
