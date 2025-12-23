@@ -5,7 +5,7 @@ import useEmail from '@/hooks/useEmail';
 import React, { createContext, useContext, useState } from 'react'
 
 
-type TransferType  = 'crypto-to-cash' | 'cash-to-crypto' | 'crypto-to-fiat-loan'
+export type TransferType  = 'crypto-to-cash' | 'cash-to-crypto' | 'crypto-to-fiat-loan'
 
 type ConversionContext = ReturnType<typeof useConversion>
 type EmailContext = ReturnType<typeof useEmail>
@@ -21,7 +21,7 @@ const CheckoutContext = createContext <CheckoutContextValue>({})
 
 
 const Checkout = ({ children }: { children: React.ReactNode;}) => {
-    const [ selectedTransferType, setSelectedTransferType ] = useState('crypto-to-cash')
+    const [ selectedTransferType, setSelectedTransferType ] = useState<TransferType>('crypto-to-cash')
 
     const conversionObjects = useConversion()
     const emailObjects = useEmail({label: selectedTransferType})

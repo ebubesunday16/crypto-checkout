@@ -2,13 +2,13 @@
 
 import React from 'react'
 import { motion } from 'motion/react';
-import { useCheckoutContext } from './Checkout';
+import { type TransferType , useCheckoutContext } from './Checkout';
 
-const PAYMENT_TYPES = [
+const PAYMENT_TYPES: {id: TransferType, label: string}[] = [
     {id: 'crypto-to-cash', label: 'Crypto to cash'},
     {id: 'cash-to-crypto', label: 'Cash to crypto'},
     {id: 'crypto-to-fiat-loan', label: 'Crypto to fiat loan'},
-  ];
+  ] 
 
 const TransferType = () => {
     const { selectedTransferType, setSelectedTransferType } = useCheckoutContext();
