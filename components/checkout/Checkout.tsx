@@ -17,7 +17,7 @@ type CheckoutContextValue = {
 
 } & ConversionContext & EmailContext
 
-const CheckoutContext = createContext <CheckoutContextValue>({})
+const CheckoutContext = createContext <CheckoutContextValue | null >(null)
 
 
 const Checkout = ({ children }: { children: React.ReactNode;}) => {
@@ -58,7 +58,12 @@ const Checkout = ({ children }: { children: React.ReactNode;}) => {
 }
 
 export const useCheckoutContext = () => {
-    return useContext(CheckoutContext)
+    const ctx = React.useContext(CheckoutContext);
+  if (!ctx) {
+    throw new Error('useCheckoutContext must be used inside <CheckoutProvider>');
+  }
+  return ctx;
+
 }
 
 export default Checkout
